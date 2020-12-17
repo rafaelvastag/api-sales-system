@@ -1,5 +1,7 @@
 package com.br.rafaelvastag.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +31,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteEntity salvar(@RequestBody ClienteEntity cliente) {
+	public ClienteEntity salvar(@RequestBody @Valid ClienteEntity cliente) {
 
 		return clienteRepository.save(cliente);
 
@@ -38,31 +40,29 @@ public class ClienteController {
 	@GetMapping("{codigoCliente}")
 	public ClienteEntity findById(@PathVariable("codigoCliente") Long id) {
 
-		return clienteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		return clienteRepository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 	}
 
 	@DeleteMapping("{codigoCliente}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletar(@PathVariable("codigoCliente") Long id) {
 
-		clienteRepository.findById(id)
-					.map(cliente -> {
-								clienteRepository.delete(cliente);
-								return Void.TYPE;
-					}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		clienteRepository.findById(id).map(cliente -> {
+			clienteRepository.delete(cliente);
+			return Void.TYPE;
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
 	}
 
 	@PutMapping("{codigoCliente}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable("codigoCliente") Long id, 
-											@RequestBody ClienteEntity clienteAtualizado) {
+	public void atualizar(@PathVariable("codigoCliente") @Valid Long id, @RequestBody ClienteEntity clienteAtualizado) {
 
-		clienteRepository.findById(id)
-				.map( cliente -> {
-					clienteAtualizado.setId(cliente.getId());
-					return clienteRepository.save(clienteAtualizado);
-				}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		clienteRepository.findById(id).map(cliente -> {
+			clienteAtualizado.setId(cliente.getId());
+			return clienteRepository.save(clienteAtualizado);
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 	}
 
 }

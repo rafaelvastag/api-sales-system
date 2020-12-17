@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -25,27 +26,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClienteEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(nullable = false, length = 150)
-	@NotEmpty
+	@NotEmpty(message = "{campo.nome.obrigatorio}")
 	private String nome;
-	
+
 	@Column(nullable = false, length = 11)
-	@CPF
+	@CPF(message = "{campo.nome.invalido}")
+	@NotNull(message = "{campo.cpf.obrigatorio}")
 	private String cpf;
-	
+
 	@Column(name = "data_cadastro", updatable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataCadastro;
-	
+
 	@PrePersist
 	public void prePersist() {
 		setDataCadastro(LocalDate.now());
-		
+
 	}
-	
+
 }
