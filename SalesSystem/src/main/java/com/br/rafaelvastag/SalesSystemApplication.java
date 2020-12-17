@@ -22,7 +22,7 @@ public class SalesSystemApplication {
 		return args -> {
 			
 			ClienteEntity cliente = ClienteEntity.builder()
-													.cpf("22222222222")
+													.cpf("83117276009")
 													.nome("rafael")
 													.build();
 			
