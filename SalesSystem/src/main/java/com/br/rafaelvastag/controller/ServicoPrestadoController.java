@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public class ServicoPrestadoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ServicoEntity salvar(@RequestBody ServicoPrestadoDTO dto) {
+	public ServicoEntity salvar(@RequestBody @Valid ServicoPrestadoDTO dto) {
 		
 		LocalDate dataFormatada = LocalDate.parse(dto.getData(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		Integer idCliente = dto.getIdCliente();

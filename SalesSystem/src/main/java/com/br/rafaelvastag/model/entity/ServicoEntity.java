@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -24,9 +26,11 @@ public class ServicoEntity {
 	private Long id;
 	
 	@Column(nullable = false, length = 150)
+	@NotEmpty(message = "{campo.descricao.obrigatorio}")
 	private String descricao;
 	
 	@Column
+	@NotNull(message = "{campo.preco.obrigatorio}")
 	private BigDecimal valor;
 	
 	@ManyToOne
@@ -35,6 +39,7 @@ public class ServicoEntity {
 	
 	@Column
 	@JsonFormat(pattern = "dd/MM/yyyy")
+	@NotNull(message = "{campo.data.obrigatorio}")
 	private LocalDate data;
 
 }
