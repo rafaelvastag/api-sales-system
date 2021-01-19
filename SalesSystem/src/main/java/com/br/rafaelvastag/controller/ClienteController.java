@@ -23,7 +23,6 @@ import com.br.rafaelvastag.model.repository.ClienteRepository;
 
 @RestController
 @RequestMapping("/api/clientes")
-@CrossOrigin("http://localhost:4200")
 public class ClienteController {
 
 	private final ClienteRepository clienteRepository;
