@@ -1,5 +1,7 @@
 package com.br.rafaelvastag.service;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.br.rafaelvastag.exception.UsuarioCadastradoException;
 import com.br.rafaelvastag.model.entity.UsuarioEntity;
 import com.br.rafaelvastag.model.repository.UsuarioRepository;
 
@@ -28,6 +31,16 @@ public class UsuarioService implements UserDetailsService{
 							.password(usuario.getPassword())
 							.roles("USER")
 							.build();
+	}
+
+	public UsuarioEntity salvar(@Valid UsuarioEntity usuario) {
+		boolean exists = repository.existsByUsername(usuario.getUsername());
+		
+		if (exists) {
+			throw new UsuarioCadastradoException(usuario.getUsername());
+		}
+		
+		return repository.save(usuario);
 	}
 
 }
